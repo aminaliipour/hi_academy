@@ -76,7 +76,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-border/40 text-center text-sm text-muted-foreground">
-          <p>© ۱۴۰۳ Hi Academy. تمامی حقوق محفوظ است.</p>
+          <p>© امین علیپور 1404. تمامی حقوق محفوظ است.</p>
         </div>
       </div>
     </footer>

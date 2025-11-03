@@ -1,7 +1,6 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Card, CardContent } from "@/components/ui/card"
-import { Users, Award, Target, Heart } from "lucide-react"
+import { ContactMap } from "@/components/contact-map"
 
 export default function AboutPage() {
   return (
@@ -24,70 +23,56 @@ export default function AboutPage() {
         {/* Main Content */}
         <section className="py-16 md:py-24">
           <div className="container">
-            <div className="max-w-4xl mx-auto space-y-12">
-              {/* About Text */}
-              <div className="space-y-6 text-lg leading-relaxed text-muted-foreground">
-                <p>
-                  [متن معرفی مرکز آموزشی شما در اینجا قرار می‌گیرد]
+            <div className="max-w-4xl mx-auto space-y-8">
+              <div className="space-y-6 text-lg leading-relaxed">
+                <p className="text-muted-foreground">
+                  <span className="text-foreground font-semibold">Hi Academy</span> یک مرکز آموزش تخصصی در حوزه معماری و طراحی داخلی است که با هدف ارتقای دانش و مهارت‌های علاقه‌مندان به این حوزه تأسیس شده است. ما با بهره‌گیری از اساتید مجرب و روش‌های نوین آموزشی، تلاش می‌کنیم تا بهترین تجربه یادگیری را برای شما فراهم کنیم.
                 </p>
-                <p>
-                  [توضیحات بیشتر درباره تاریخچه، چشم‌انداز و اهداف]
+                
+                <p className="text-muted-foreground">
+                  دوره‌های آموزشی ما شامل آموزش نرم‌افزارهای تخصصی مانند <span className="text-foreground font-medium">AutoCAD</span>، <span className="text-foreground font-medium">3ds Max</span>، <span className="text-foreground font-medium">V-Ray</span>، <span className="text-foreground font-medium">Lumion</span> و سایر ابزارهای کاربردی در صنعت معماری و طراحی می‌باشد. تمامی دوره‌ها با رویکرد پروژه‌محور و عملی طراحی شده‌اند تا دانشجویان بتوانند مهارت‌های خود را در پروژه‌های واقعی به کار گیرند.
                 </p>
-              </div>
 
-              {/* Features Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8">
-                <Card className="border-border/40">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Users className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold">اساتید مجرب</h3>
-                    <p className="text-muted-foreground">
-                      [توضیحات درباره تیم اساتید]
-                    </p>
-                  </CardContent>
-                </Card>
+                <p className="text-muted-foreground">
+                  ما در <span className="text-foreground font-semibold">دفتر معماری‌های آرشیتکت</span> واقع در لاهیجان، استان گیلان مستقر هستیم و با افتخار خدمات آموزشی خود را به علاقه‌مندان این حوزه ارائه می‌دهیم. تیم ما متشکل از معماران و طراحان حرفه‌ای است که تجربه اجرای پروژه‌های متعدد را دارند.
+                </p>
 
-                <Card className="border-border/40">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Award className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold">گواهینامه معتبر</h3>
-                    <p className="text-muted-foreground">
-                      [توضیحات درباره گواهینامه‌ها]
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border/40">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Target className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold">آموزش کاربردی</h3>
-                    <p className="text-muted-foreground">
-                      [توضیحات درباره روش آموزش]
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border/40">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Heart className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-semibold">پشتیبانی دائمی</h3>
-                    <p className="text-muted-foreground">
-                      [توضیحات درباره پشتیبانی]
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="bg-card border border-border/40 rounded-lg p-6 md:p-8">
+                  <h2 className="text-2xl font-bold mb-4">چرا Hi Academy؟</h2>
+                  <ul className="space-y-3 text-muted-foreground">
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>آموزش توسط اساتید مجرب با سابقه اجرای پروژه‌های واقعی</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>دوره‌های کاملاً کاربردی و پروژه‌محور</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>گواهینامه معتبر پس از اتمام دوره</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>پشتیبانی و مشاوره رایگان پس از اتمام دوره</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>امکان آموزش حضوری و آنلاین</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary mt-1">✓</span>
+                      <span>ارائه فایل‌های تمرینی و پروژه‌های عملی</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Contact Map Section */}
+        <ContactMap />
       </main>
 
       <Footer />
