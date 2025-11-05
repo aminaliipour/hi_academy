@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   // Check if the request is for an admin route
   if (request.nextUrl.pathname.startsWith('/admin')) {
     // Allow access to login page
