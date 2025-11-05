@@ -21,6 +21,8 @@ async function getAllCourses() {
       price: courses.price,
       level: courses.level,
       published: courses.published,
+      coming_soon: courses.coming_soon,
+      instructor_name: courses.instructor_name,
       category: {
         name: categories.name,
       },
@@ -108,11 +110,14 @@ export default async function AdminCoursesPage() {
                           <Badge variant={course.published ? "default" : "secondary"}>
                             {course.published ? "منتشر شده" : "پیش‌نویس"}
                           </Badge>
+                          {course.coming_soon && (
+                            <Badge className="bg-primary/95 text-primary-foreground">به زودی</Badge>
+                          )}
                         </div>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span>{course.category?.name || 'بدون دسته‌بندی'}</span>
                           <span>•</span>
-                          <span>{course.instructor?.name || 'نامشخص'}</span>
+                          <span>{course.instructor?.name || course.instructor_name || 'نامشخص'}</span>
                         </div>
                       </div>
 
@@ -132,18 +137,27 @@ export default async function AdminCoursesPage() {
                     </div>
 
                     <div className="flex items-center gap-6 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">جلسات: </span>
-                        <span className="font-medium">{course.lessons}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">دانشجویان: </span>
-                        <span className="font-medium">{course.students}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">قیمت: </span>
-                        <span className="font-medium">{formatPrice(course.price)}</span>
-                      </div>
+                      {!course.coming_soon && (
+                        <>
+                          <div>
+                            <span className="text-muted-foreground">جلسات: </span>
+                            <span className="font-medium">{course.lessons}</span>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">دانشجویان: </span>
+                            <span className="font-medium">{course.students}</span>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">قیمت: </span>
+                            <span className="font-medium">{course.price ? formatPrice(course.price) : 'رایگان'}</span>
+                          </div>
+                        </>
+                      )}
+                      {course.coming_soon && (
+                        <div className="text-muted-foreground italic">
+                          دوره به زودی راه‌اندازی می‌شود - اطلاعات کامل نیست
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex gap-2">

@@ -21,14 +21,15 @@ export async function POST(request: NextRequest) {
         thumbnail_url: body.thumbnail_url,
         teaser_url: body.teaser_url,
         location: body.location,
-        instructor_name: body.instructor_name,
-        price: body.price || 0,
-        level: body.level || 'beginner',
-        session_count: body.session_count || 0,
+        instructor_name: body.coming_soon ? null : body.instructor_name,
+        price: body.coming_soon ? null : (body.price || 0),
+        level: body.coming_soon ? null : (body.level || 'beginner'),
+        session_count: body.coming_soon ? null : (body.session_count || 0),
         what_you_learn: body.what_you_learn,
         prerequisites: body.prerequisites,
         category_id: body.category_id,
         published: body.published || false,
+        coming_soon: body.coming_soon || false,
       })
       .returning()
 

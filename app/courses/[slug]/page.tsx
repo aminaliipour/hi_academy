@@ -31,6 +31,7 @@ async function getCourseBySlug(slug: string) {
       level: courses.level,
       session_count: courses.session_count,
       published: courses.published,
+      coming_soon: courses.coming_soon,
       what_you_learn: courses.what_you_learn,
       prerequisites: courses.prerequisites,
       category: {
@@ -96,10 +97,15 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                     {courseData.category && (
                       <Badge variant="outline">{courseData.category.name}</Badge>
                     )}
-                    <Badge variant="secondary">
-                      <BarChart3 className="h-3 w-3 ml-1" />
-                      {levelLabels[courseData.level as keyof typeof levelLabels]}
-                    </Badge>
+                    {courseData.coming_soon && (
+                      <Badge className="bg-primary/95 text-primary-foreground">به زودی</Badge>
+                    )}
+                    {!courseData.coming_soon && courseData.level && (
+                      <Badge variant="secondary">
+                        <BarChart3 className="h-3 w-3 ml-1" />
+                        {levelLabels[courseData.level as keyof typeof levelLabels]}
+                      </Badge>
+                    )}
                   </div>
 
                   <h1 className="text-3xl md:text-4xl font-bold leading-tight">{courseData.title}</h1>
@@ -108,10 +114,12 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                 </div>
 
                 <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4" />
-                    <span>{courseData.session_count} جلسه</span>
-                  </div>
+                  {!courseData.coming_soon && courseData.session_count && (
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4" />
+                      <span>{courseData.session_count} جلسه</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     <span>{courseData.lessons.length} محتوای آموزشی</span>
@@ -167,11 +175,12 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                 <CourseDetailCard
                   courseId={courseData.id}
                   courseTitle={courseData.title}
-                  price={courseData.price}
+                  price={courseData.price || 0}
                   thumbnailUrl={courseData.thumbnail_url}
-                  sessionCount={courseData.session_count}
+                  sessionCount={courseData.session_count || 0}
                   lessonsCount={courseData.lessons.length}
-                  level={courseData.level}
+                  level={courseData.level || 'beginner'}
+                  comingSoon={courseData.coming_soon}
                 />
               </div>
             </div>
@@ -182,7 +191,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
         <CourseTabs 
           lessons={courseData.lessons}
           courseSlug={courseData.slug}
-          sessionCount={courseData.session_count}
+          sessionCount={courseData.session_count || 0}
           description={courseData.description}
           whatYouLearn={courseData.what_you_learn}
           prerequisites={courseData.prerequisites}

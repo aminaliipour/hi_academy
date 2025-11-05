@@ -37,9 +37,10 @@ export const courses = pgTable('courses', {
   teaser_url: text('teaser_url'), // تیزر دوره
   location: varchar('location', { length: 255 }), // محل برگزاری
   instructor_name: varchar('instructor_name', { length: 255 }), // نام مدرس
-  price: integer('price').notNull().default(0),
-  level: courseLevelEnum('level').notNull().default('beginner'),
-  session_count: integer('session_count').notNull().default(0), // تعداد جلسات
+  price: integer('price').default(0),
+  level: courseLevelEnum('level').default('beginner'),
+  session_count: integer('session_count').default(0), // تعداد جلسات
+  coming_soon: boolean('coming_soon').notNull().default(false), // دوره به زودی راه‌اندازی می‌شود
   what_you_learn: text('what_you_learn'), // چه چیزی یاد خواهید گرفت (JSON array)
   prerequisites: text('prerequisites'), // پیش‌نیازها (JSON array)
   category_id: integer('category_id').references(() => categories.id),

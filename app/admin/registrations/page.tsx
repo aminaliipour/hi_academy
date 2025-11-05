@@ -57,6 +57,7 @@ export default function RegistrationsPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState<number | null>(null)
+  const [selectedCourse, setSelectedCourse] = useState<string>('all')
 
   useEffect(() => {
     fetchRegistrations()
@@ -109,6 +110,19 @@ export default function RegistrationsPage() {
     }).format(new Date(date))
   }
 
+  // Get unique courses from registrations
+  const uniqueCourses = Array.from(
+    new Map(
+      registrations
+        .filter(r => r.course)
+        .map(r => [r.course!.slug, r.course!.title])
+    )
+  )
+
+  const filteredRegistrations = selectedCourse === 'all'
+    ? registrations
+    : registrations.filter(r => r.course?.slug === selectedCourse)
+
   return (
     <div className="min-h-screen bg-background w-full overflow-x-hidden" dir="rtl">
       <AdminHeader />
@@ -124,17 +138,32 @@ export default function RegistrationsPage() {
 
           <Card className="border-border/40">
             <CardHeader>
-              <CardTitle>ثبت‌نام‌ها ({registrations.length})</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle>ثبت‌نام‌ها ({filteredRegistrations.length})</CardTitle>
+                <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+                  <SelectTrigger className="w-[250px]">
+                    <SelectValue placeholder="فیلتر بر اساس دوره" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">همه دوره‌ها</SelectItem>
+                    {uniqueCourses.map(([slug, title]) => (
+                      <SelectItem key={slug} value={slug}>
+                        {title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </CardHeader>
             <CardContent>
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
                 </div>
-              ) : registrations.length === 0 ? (
+              ) : filteredRegistrations.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">
                   <Users className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                  <p>هنوز ثبت‌نامی وجود ندارد</p>
+                  <p>{selectedCourse === 'all' ? 'هنوز ثبت‌نامی وجود ندارد' : 'ثبت‌نامی برای این دوره وجود ندارد'}</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -151,7 +180,7 @@ export default function RegistrationsPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {registrations.map((registration) => (
+                      {filteredRegistrations.map((registration) => (
                         <TableRow key={registration.id}>
                           <TableCell className="font-medium">
                             {registration.full_name}

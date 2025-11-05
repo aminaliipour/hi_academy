@@ -27,6 +27,7 @@ async function getAllCourses() {
       level: courses.level,
       session_count: courses.session_count,
       published: courses.published,
+      coming_soon: courses.coming_soon,
       created_at: courses.created_at,
       updated_at: courses.updated_at,
       category: {

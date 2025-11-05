@@ -15,6 +15,7 @@ interface CourseDetailCardProps {
   sessionCount: number
   lessonsCount: number
   level: string
+  comingSoon?: boolean
 }
 
 const levelLabels = {
@@ -35,18 +36,24 @@ export function CourseDetailCard({
   sessionCount,
   lessonsCount,
   level,
+  comingSoon = false,
 }: CourseDetailCardProps) {
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false)
 
   return (
     <>
       <Card className="sticky top-20 border-border/40">
+        {comingSoon && (
+          <div className="bg-primary/95 text-primary-foreground text-center py-3 rounded-t-lg font-semibold">
+            به زودی
+          </div>
+        )}
         <div className="relative aspect-video overflow-hidden rounded-t-lg">
           <Image
             src={thumbnailUrl || "/placeholder.svg"}
             alt={courseTitle}
             fill
-            className="object-cover"
+            className={`object-cover ${comingSoon ? 'opacity-60' : ''}`}
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black/30">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary">
@@ -56,42 +63,65 @@ export function CourseDetailCard({
         </div>
 
         <CardContent className="p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold text-primary">
-              {price === 0 ? "رایگان" : formatPrice(price)}
-            </span>
-          </div>
+          {!comingSoon ? (
+            <>
+              <div className="flex items-center justify-between">
+                <span className="text-3xl font-bold text-primary">
+                  {price === 0 ? "رایگان" : formatPrice(price)}
+                </span>
+              </div>
 
-          <Button
-            onClick={() => setEnrollDialogOpen(true)}
-            className="w-full"
-            size="lg"
-          >
-            ثبت‌نام در دوره
-          </Button>
+              <Button
+                onClick={() => setEnrollDialogOpen(true)}
+                className="w-full"
+                size="lg"
+              >
+                ثبت‌نام در دوره
+              </Button>
 
-          <div className="p-4 rounded-lg bg-muted/50 text-sm text-muted-foreground text-center">
-            با ثبت‌نام، به زودی با شما تماس خواهیم گرفت
-          </div>
+              <div className="p-4 rounded-lg bg-muted/50 text-sm text-muted-foreground text-center">
+                با ثبت‌نام، به زودی با شما تماس خواهیم گرفت
+              </div>
 
-          <div className="pt-4 border-t border-border/40 space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">تعداد جلسات</span>
-              <span className="font-medium">{sessionCount} جلسه</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">محتوای آموزشی</span>
-              <span className="font-medium">{lessonsCount} مورد</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">سطح</span>
-              <span className="font-medium">{levelLabels[level as keyof typeof levelLabels]}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">دسترسی</span>
-              <span className="font-medium">نامحدود</span>
-            </div>
-          </div>
+              <div className="pt-4 border-t border-border/40 space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">تعداد جلسات</span>
+                  <span className="font-medium">{sessionCount} جلسه</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">محتوای آموزشی</span>
+                  <span className="font-medium">{lessonsCount} مورد</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">سطح</span>
+                  <span className="font-medium">{levelLabels[level as keyof typeof levelLabels]}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">دسترسی</span>
+                  <span className="font-medium">نامحدود</span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-center py-4">
+                <p className="text-2xl font-bold text-muted-foreground">به زودی راه‌اندازی می‌شود</p>
+              </div>
+
+              <Button
+                onClick={() => setEnrollDialogOpen(true)}
+                className="w-full"
+                size="lg"
+                variant="outline"
+              >
+                اطلاع از راه‌اندازی دوره
+              </Button>
+
+              <div className="p-4 rounded-lg bg-muted/50 text-sm text-muted-foreground text-center">
+                برای اطلاع از زمان شروع دوره، ثبت‌نام پیش‌فرض انجام دهید
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 

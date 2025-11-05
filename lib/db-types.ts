@@ -30,10 +30,11 @@ export interface Course {
   teaser_url?: string | null
   location?: string | null
   instructor_name?: string | null
-  price: number
-  level: CourseLevel
-  session_count: number
+  price: number | null
+  level: CourseLevel | null
+  session_count: number | null
   published: boolean
+  coming_soon: boolean
   created_at: Date
   updated_at: Date
 }

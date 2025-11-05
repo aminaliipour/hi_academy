@@ -20,22 +20,31 @@ export function CourseCard({ course }: CourseCardProps) {
     return new Intl.NumberFormat("fa-IR").format(price) + " تومان"
   }
 
+  const isComingSoon = course.coming_soon || false
+
   return (
     <Link href={`/courses/${course.slug}`}>
-      <Card className="group overflow-hidden border-border/40 bg-card hover:border-primary/50 hover:shadow-lg transition-all duration-300 h-full flex flex-col">
+      <Card className="group overflow-hidden border-border/40 bg-card hover:border-primary/50 hover:shadow-lg transition-all duration-300 h-full flex flex-col relative">
+        {isComingSoon && (
+          <div className="absolute top-0 left-0 right-0 z-10 bg-primary/95 text-primary-foreground text-center py-2 font-semibold text-sm">
+            به زودی
+          </div>
+        )}
         <div className="relative aspect-video overflow-hidden">
           <Image
             src={course.thumbnail_url || "/placeholder.svg?height=400&width=600&query=architecture+course"}
             alt={course.title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`object-cover transition-transform duration-300 group-hover:scale-105 ${isComingSoon ? 'opacity-60' : ''}`}
           />
-          <div className="absolute top-3 right-3">
-            <Badge variant="secondary" className="bg-background/90 backdrop-blur">
-              <BarChart3 className="h-3 w-3 ml-1" />
-              {levelLabels[course.level]}
-            </Badge>
-          </div>
+          {!isComingSoon && course.level && (
+            <div className="absolute top-3 right-3">
+              <Badge variant="secondary" className="bg-background/90 backdrop-blur">
+                <BarChart3 className="h-3 w-3 ml-1" />
+                {levelLabels[course.level]}
+              </Badge>
+            </div>
+          )}
         </div>
 
         <CardContent className="p-5 space-y-3 flex-1 flex flex-col">
@@ -53,23 +62,33 @@ export function CourseCard({ course }: CourseCardProps) {
             <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed flex-1">{course.description}</p>
           )}
 
-          <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-            <div className="flex items-center gap-1">
-              <Users className="h-3.5 w-3.5" />
-              <span>{course.session_count} جلسه</span>
+          {!isComingSoon && (
+            <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
+              {course.session_count && course.session_count > 0 && (
+                <div className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" />
+                  <span>{course.session_count} جلسه</span>
+                </div>
+              )}
+              {course.lesson_count && (
+                <div className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  <span>{course.lesson_count} محتوا</span>
+                </div>
+              )}
             </div>
-            {course.lesson_count && (
-              <div className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
-                <span>{course.lesson_count} محتوا</span>
-              </div>
-            )}
-          </div>
+          )}
         </CardContent>
 
         <CardFooter className="p-5 pt-0 flex items-center justify-between border-t border-border/40 mt-auto">
-          {course.instructor_name && <span className="text-sm text-muted-foreground">{course.instructor_name}</span>}
-          <span className="font-bold text-primary text-lg">{course.price === 0 ? "رایگان" : formatPrice(course.price)}</span>
+          {!isComingSoon && course.instructor_name && (
+            <span className="text-sm text-muted-foreground">{course.instructor_name}</span>
+          )}
+          {isComingSoon ? (
+            <span className="font-bold text-primary text-lg w-full text-center">به زودی</span>
+          ) : (
+            <span className="font-bold text-primary text-lg">{course.price === 0 || course.price === null ? "رایگان" : formatPrice(course.price)}</span>
+          )}
         </CardFooter>
       </Card>
     </Link>

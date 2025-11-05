@@ -37,6 +37,7 @@ export default function EditCoursePage() {
     session_count: 0,
     category_id: '',
     published: false,
+    coming_soon: false,
     what_you_learn: [] as string[],
     prerequisites: [] as string[],
   })
@@ -65,6 +66,7 @@ export default function EditCoursePage() {
           session_count: data.session_count || 0,
           category_id: data.category_id ? data.category_id.toString() : '',
           published: data.published || false,
+          coming_soon: data.coming_soon || false,
           what_you_learn: data.what_you_learn ? JSON.parse(data.what_you_learn) : [],
           prerequisites: data.prerequisites ? JSON.parse(data.prerequisites) : [],
         })
@@ -172,8 +174,14 @@ export default function EditCoursePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.title || !formData.instructor_name) {
-      toast.error('لطفا عنوان دوره و نام مدرس را وارد کنید')
+    if (!formData.title) {
+      toast.error('لطفا عنوان دوره را وارد کنید')
+      return
+    }
+    
+    // Validation for non-coming-soon courses
+    if (!formData.coming_soon && !formData.instructor_name) {
+      toast.error('لطفا نام مدرس را وارد کنید یا دوره را به زودی علامت بزنید')
       return
     }
     
@@ -188,8 +196,10 @@ export default function EditCoursePage() {
         body: JSON.stringify({
           id: parseInt(courseId),
           ...formData,
-          price: parseInt(formData.price.toString()),
-          session_count: parseInt(formData.session_count.toString()),
+          price: formData.coming_soon ? null : parseInt(formData.price.toString()),
+          session_count: formData.coming_soon ? null : parseInt(formData.session_count.toString()),
+          instructor_name: formData.coming_soon ? null : formData.instructor_name,
+          level: formData.coming_soon ? null : formData.level,
           category_id: formData.category_id ? parseInt(formData.category_id) : null,
           what_you_learn: JSON.stringify(formData.what_you_learn),
           prerequisites: JSON.stringify(formData.prerequisites),
@@ -279,7 +289,11 @@ export default function EditCoursePage() {
                     placeholder="مثال: دکتر احمد محمدی"
                     value={formData.instructor_name}
                     onChange={(e) => handleInputChange('instructor_name', e.target.value)}
+                    disabled={formData.coming_soon}
                   />
+                  {formData.coming_soon && (
+                    <p className="text-xs text-muted-foreground">در حالت "به زودی" نیازی به مدرس نیست</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -307,7 +321,11 @@ export default function EditCoursePage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="category">دسته‌بندی</Label>
-                    <Select value={formData.category_id} onValueChange={(value) => handleInputChange('category_id', value)}>
+                    <Select 
+                      value={formData.category_id} 
+                      onValueChange={(value) => handleInputChange('category_id', value)}
+                      disabled={formData.coming_soon}
+                    >
                       <SelectTrigger id="category">
                         <SelectValue placeholder="انتخاب دسته‌بندی" />
                       </SelectTrigger>
@@ -323,7 +341,11 @@ export default function EditCoursePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="level">سطح دوره</Label>
-                    <Select value={formData.level} onValueChange={(value) => handleInputChange('level', value)}>
+                    <Select 
+                      value={formData.level} 
+                      onValueChange={(value) => handleInputChange('level', value)}
+                      disabled={formData.coming_soon}
+                    >
                       <SelectTrigger id="level">
                         <SelectValue placeholder="انتخاب سطح" />
                       </SelectTrigger>
@@ -345,7 +367,11 @@ export default function EditCoursePage() {
                       placeholder="2500000"
                       value={formData.price}
                       onChange={(e) => handleInputChange('price', e.target.value)}
+                      disabled={formData.coming_soon}
                     />
+                    {formData.coming_soon && (
+                      <p className="text-xs text-muted-foreground">قیمت بعداً تعیین می‌شود</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -356,7 +382,11 @@ export default function EditCoursePage() {
                       placeholder="10"
                       value={formData.session_count}
                       onChange={(e) => handleInputChange('session_count', e.target.value)}
+                      disabled={formData.coming_soon}
                     />
+                    {formData.coming_soon && (
+                      <p className="text-xs text-muted-foreground">تعداد جلسات بعداً تعیین می‌شود</p>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -565,6 +595,18 @@ export default function EditCoursePage() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
+                    <Label htmlFor="coming_soon">دوره به زودی</Label>
+                    <p className="text-xs text-muted-foreground">دوره هنوز آماده نیست، فقط توضیحات نمایش داده شود</p>
+                  </div>
+                  <Switch 
+                    id="coming_soon" 
+                    checked={formData.coming_soon} 
+                    onCheckedChange={(checked) => handleInputChange('coming_soon', checked)} 
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
                     <Label htmlFor="published">انتشار دوره</Label>
                     <p className="text-xs text-muted-foreground">دوره برای دانشجویان قابل مشاهده باشد</p>
                   </div>
@@ -582,7 +624,7 @@ export default function EditCoursePage() {
                 type="submit"
                 className="w-full" 
                 size="lg"
-                disabled={loading || !formData.title || !formData.instructor_name}
+                disabled={loading || !formData.title}
               >
                 {loading ? 'در حال به‌روزرسانی...' : 'به‌روزرسانی دوره'}
               </Button>
